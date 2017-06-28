@@ -14,41 +14,78 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-    EditText phoneNo;
     String message;
+    String number="5556";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button alert = (Button) findViewById(R.id.alert);
+        findViewById(R.id.alert).setOnTouchListener(new View.OnTouchListener() {
+            private GestureDetector gestureDetector = new GestureDetector(MainActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent e) {
+                    //        Intent intent= getIntent();
+//        number= intent.getStringExtra("Number");
+                    SmsManager manager= SmsManager.getDefault();
+                    manager.sendTextMessage(number,null,"Please Help",null,null);
+                    Toast.makeText(MainActivity.this, "Super Emergency message sent to"+number, Toast.LENGTH_SHORT).show();
+                    return super.onDoubleTap(e);
+                }
+            });
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                //        Intent intent= getIntent();
+//        number= intent.getStringExtra("Number");
+                SmsManager manager= SmsManager.getDefault();
+                manager.sendTextMessage(number, null, "Please Help", null, null);
+                Toast.makeText(MainActivity.this, "Emergency message sent to"+number, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 //        LocationManager listenerr =(LocationManager) getSystemService(LOCATION_SERVICE);
 //        listenerr.requestLocationUpdates(LocationManager.GPS_PROVIDER,30*1000,0,listener);
 
-        phoneNo= (EditText) findViewById(R.id.number1);
-        Button alert = (Button) findViewById(R.id.alert);
-        alert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendSms();
-            }
-        });
     }
-
+//    boolean firstTouch = false;
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if(event.getAction() == event.ACTION_DOWN){
+//            if(firstTouch && (Helper.getCurrentTimeInMilliSeconds() - time) <= 300) {
+//                //do stuff here for double tap
+//                Log.e("** DOUBLE TAP**"," second tap ");
+//                firstTouch = false;
+//
+//            } else {
+//                firstTouch = true;
+//                time = Helper.getCurrentTimeInMilliSeconds();
+//                Log.e("** SINGLE  TAP**"," First Tap time  "+time);
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
     private void sendSms() {
 //        LocationManager listenerr =(LocationManager) getSystemService(LOCATION_SERVICE);
 //        StringBuilder str = new StringBuilder();
 //        str.append(listenerr.requestLocationUpdates(LocationManager.GPS_PROVIDER,30*1000,0,listener));
-        String number= phoneNo.getText().toString();
+//        Intent intent= getIntent();
+//        number= intent.getStringExtra("Number");
         SmsManager manager= SmsManager.getDefault();
         manager.sendTextMessage(number,null,"Please Help",null,null);
-        Toast.makeText(MainActivity.this, "Emergency message sent to"+phoneNo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "Emergency message sent to"+number, Toast.LENGTH_SHORT).show();
     }
 
     @Override
