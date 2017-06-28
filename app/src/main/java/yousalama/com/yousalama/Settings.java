@@ -7,15 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Created by USER PC on 26-Apr-17.
+ * Created by USER PC on 28-Jun-17.
  */
-public class Long_Press extends AppCompatActivity {
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+public class Settings extends AppCompatActivity{
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.long_press);
-
+        setContentView(R.layout.settings);
     }
 
     @Override

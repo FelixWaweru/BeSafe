@@ -1,9 +1,15 @@
 package yousalama.com.yousalama;
 
+import android.Manifest;
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,55 +18,37 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-//
-//    private ViewPager viewPager;
-//    private TabsPagerAdapter mAdapter;
-//    private ActionBar actionBar;
-//    // Tab titles
-//    private String[] tabs = { "Top Rated", "Games", "Movies" };
+    EditText phoneNo;
+    String message;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        LocationManager listenerr =(LocationManager) getSystemService(LOCATION_SERVICE);
+//        listenerr.requestLocationUpdates(LocationManager.GPS_PROVIDER,30*1000,0,listener);
 
+        phoneNo= (EditText) findViewById(R.id.number1);
         Button alert = (Button) findViewById(R.id.alert);
         alert.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNumber;
-                Location currentLocation;
-//                public void sendLocationSMS(phoneNumber,currentLocation) {
-                    phoneNumber = "0705244074";
-                    SmsManager smsManager = SmsManager.getDefault();
-                    StringBuffer smsBody = new StringBuffer();
-                    smsBody.append("http://maps.google.com?q=");
-                    smsBody.append(currentLocation.getLatitude());
-                    smsBody.append(",");
-                    smsBody.append(currentLocation.getLongitude());
-                    smsManager.sendTextMessage(phoneNumber, null, smsBody.toString(), null, null);
-//                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.com/maps?saddr=" + phoneNumber)));
-                    Toast.makeText(MainActivity.this, "Distress sent", Toast.LENGTH_SHORT).show();
-//                }
-
-        }
+                sendSms();
+            }
         });
+    }
 
-//// Initilization
-//        viewPager = (ViewPager) findViewById(R.id.pager);
-//        actionBar = getActionBar();
-//        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-//
-//        viewPager.setAdapter(mAdapter);
-//        actionBar.setHomeButtonEnabled(false);
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-//
-//        // Adding Tabs
-//        for (String tab_name : tabs) {
-//            actionBar.addTab(actionBar.newTab().setText(tab_name)
-//                    .setTabListener(this));
+    private void sendSms() {
+//        LocationManager listenerr =(LocationManager) getSystemService(LOCATION_SERVICE);
+//        StringBuilder str = new StringBuilder();
+//        str.append(listenerr.requestLocationUpdates(LocationManager.GPS_PROVIDER,30*1000,0,listener));
+        String number= phoneNo.getText().toString();
+        SmsManager manager= SmsManager.getDefault();
+        manager.sendTextMessage(number,null,"Please Help",null,null);
+        Toast.makeText(MainActivity.this, "Emergency message sent to"+phoneNo, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -72,18 +60,44 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.longpress:
+                //open manifesto
+                startActivity(new Intent(this, Long_Press.class));
+                return true;
+            case R.id.mainpress:
+                //open main activity
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, Settings.class));
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
 
-        return super.onOptionsItemSelected(item);
+
     }
+    LocationListener listener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
 
+        }
 
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
 }
